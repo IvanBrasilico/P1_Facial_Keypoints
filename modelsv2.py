@@ -31,10 +31,10 @@ class Net(nn.Module):
         self.conv4 = nn.Conv2d(128, 128, 3)
         # output size = (W-F)/S +1 = (26-3)/1 + 1 = 24
         # maxpool(2, 2) = 24/2 = 12
-        self.conv5 = nn.Conv2d(128, 256, 1)
+        self.conv5 = nn.Conv2d(128, 128, 1)
         # output size = (W-F)/S +1 = (12-1)/1 + 1 = 12
         # maxpool(2, 2) = 12/2 = 6
-        # CONV OUTPUT = (256, 6, 6)
+        # CONV OUTPUT = (128, 6, 6)
         
         ## Note that among the layers to add, consider including:
         # maxpooling layers, multiple conv layers, fully-connected layers, and other layers (such as dropout or batch normalization) to avoid overfitting
@@ -43,9 +43,9 @@ class Net(nn.Module):
         self.dropout3 = nn.Dropout(0.3)
         self.dropout4 = nn.Dropout(0.4)
         
-        self.fc1 = nn.Linear(256*6*6, 1024)
-        # self.fc2 = nn.Linear(136*8, 136*2)
-        self.output = nn.Linear(1024, 136)
+        self.fc1 = nn.Linear(128*6*6, 136*8)
+        self.fc2 = nn.Linear(136*8, 136*2)
+        self.output = nn.Linear(136*2, 136)
 
         
     def forward(self, x):
@@ -59,7 +59,7 @@ class Net(nn.Module):
         x = self.pool((F.relu(self.dropout3(self.conv5(x)))))
         x = x.view(x.size()[0], -1)
         x = F.relu(self.dropout4(self.fc1(x)))
-        #x = F.relu(self.dropout2(self.fc2(x)))
+        x = F.relu(self.dropout2(self.fc2(x)))
         x = self.output(x)
         # x = self.avgpool(x)
         # a modified x, having gone through all the layers of your model, should be returned
