@@ -2,7 +2,6 @@
 
 import torch
 import torch.cuda
-# from torch.autograd import Variable
 import torch.nn as nn
 import torch.nn.functional as F
 # can use the below import should you choose to initialize the weights of your Net
